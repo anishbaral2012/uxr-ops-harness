@@ -1,0 +1,17 @@
+# Local runtimes and caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+node_modules/
+.DS_Store
+Thumbs.db
+~$*
+
+# Local studies, credentials, and generated previews
+/studies/
+/output/
+/sample-guide.docx
+.env
+.env.*
+!.env.example

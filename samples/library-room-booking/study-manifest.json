@@ -1,0 +1,61 @@
+{
+  "participants": [
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "P6"
+  ],
+  "sources": [
+    {
+      "id": "S01",
+      "participant_id": "P1",
+      "session_id": "session-01",
+      "path": "transcripts/S01-P1.txt",
+      "sha256": "734714420c3a388f4d68b0067bfe22ef4b550ac5e49f491d58a12766f5245560"
+    },
+    {
+      "id": "S02",
+      "participant_id": "P2",
+      "session_id": "session-02",
+      "path": "transcripts/S02-P2.txt",
+      "sha256": "acb4ee17a50c2402831582c877c9bf8021ba7feb5840a4b753ba77c6442b85aa"
+    },
+    {
+      "id": "S03",
+      "participant_id": "P3",
+      "session_id": "session-03",
+      "path": "transcripts/S03-P3.txt",
+      "sha256": "f056e715bd23148723612206ce545dad27a9fbd178466ac09aebf6efc0be45dd"
+    },
+    {
+      "id": "S04",
+      "participant_id": "P4",
+      "session_id": "session-04",
+      "path": "transcripts/S04-P4.txt",
+      "sha256": "31fa0272646a40a8c4a7566d15ac4f55efa6ce436a13925a3041e9edd6074caf"
+    },
+    {
+      "id": "S05",
+      "participant_id": "P5",
+      "session_id": "session-05",
+      "path": "transcripts/S05-P5.txt",
+      "sha256": "77284633bcf421b8a076326217d3de18b94cb02d6e697aad59226809691a3400"
+    },
+    {
+      "id": "S06",
+      "participant_id": "P6",
+      "session_id": "session-06",
+      "path": "transcripts/S06-P6.txt",
+      "sha256": "5266eeefaf01fbc60d450d8d412a5c65c4c742734549f6ae2c095bf5f567cdb0"
+    },
+    {
+      "id": "S07",
+      "participant_id": "P6",
+      "session_id": "session-07",
+      "path": "transcripts/S07-P6-followup.txt",
+      "sha256": "6cf2752314ca507a977d3eb7e15fa3fce13a6cda324d8a750ae45943cf59eb6d"
+    }
+  ]
+}

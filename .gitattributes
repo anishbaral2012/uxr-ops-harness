@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+# The example manifest and project index hash exact file bytes.
+samples/library-room-booking/** -text whitespace=cr-at-eol
+*.docx binary
+*.pptx binary
