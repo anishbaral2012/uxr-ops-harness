@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-md-to-docx.py — Convert a UXR interview-guide markdown file to a .docx.
+Convert a UXR plan or interview-guide Markdown file to a .docx.
 
-Usage:
-    python3 md-to-docx.py <input.md> <output.docx>
+Usage (from anywhere):
+    python <harness>/scripts/uxrops.py docx <input.md> <output.docx>
 
-Handles the markdown subset produced by the uxr-interview-questions skill:
+Requires python-docx. Handles the Markdown subset produced by the stage skills:
     - Headings (#, ##, ###)
     - Blockquotes (> ...)              → italic paragraph
     - Bullets (-, *) with one level of indent → List Bullet / List Bullet 2
@@ -18,9 +18,6 @@ Handles the markdown subset produced by the uxr-interview-questions skill:
 
 import re
 import sys
-from docx import Document
-from docx.shared import Pt, Inches
-from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 
 # ---------------------------------------------------------------------------
@@ -33,6 +30,20 @@ INLINE_RE = re.compile(
     r"|`[^`\n]+`"              # `code`
     r"|\[[^\]]+\]\([^)]+\))",  # [text](url)
 )
+
+
+def _docx():
+    """Import python-docx lazily so the rest of uxrops works without it."""
+    try:
+        from docx import Document
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        from docx.shared import Inches, Pt
+    except ImportError as exc:  # pragma: no cover - exercised only without python-docx
+        raise RuntimeError(
+            "python-docx is required for Word export: pip install python-docx==1.2.0 "
+            "(or run through: uv run --with python-docx==1.2.0 ...)"
+        ) from exc
+    return Document, WD_ALIGN_PARAGRAPH, Inches, Pt
 
 
 def add_runs(paragraph, text):
@@ -142,7 +153,15 @@ def emit_table(doc, rows):
 # Main converter.
 # ---------------------------------------------------------------------------
 
+def add_heading(doc, text, level):
+    """Headings keep inline formatting instead of showing literal ** or ` marks."""
+    heading = doc.add_heading("", level=level)
+    add_runs(heading, text)
+    return heading
+
+
 def convert(md_path, out_path):
+    Document, WD_ALIGN_PARAGRAPH, Inches, Pt = _docx()
     doc = Document()
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
@@ -192,19 +211,19 @@ def convert(md_path, out_path):
 
         # Headings.
         if stripped.startswith("# "):
-            doc.add_heading(stripped[2:], level=1)
+            add_heading(doc, stripped[2:], 1)
             i += 1
             continue
         if stripped.startswith("## "):
-            doc.add_heading(stripped[3:], level=2)
+            add_heading(doc, stripped[3:], 2)
             i += 1
             continue
         if stripped.startswith("### "):
-            doc.add_heading(stripped[4:], level=3)
+            add_heading(doc, stripped[4:], 3)
             i += 1
             continue
         if stripped.startswith("#### "):
-            doc.add_heading(stripped[5:], level=4)
+            add_heading(doc, stripped[5:], 4)
             i += 1
             continue
 
@@ -265,7 +284,7 @@ def convert(md_path, out_path):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python3 md-to-docx.py <input.md> <output.docx>", file=sys.stderr)
+        print("Usage: python markdown_docx.py <input.md> <output.docx>", file=sys.stderr)
         sys.exit(2)
     convert(sys.argv[1], sys.argv[2])
     print(f"Wrote {sys.argv[2]}")

@@ -64,13 +64,31 @@ Ask the user **only** if the following remain unclear after reading the material
 
 ## Step 1 — Generate the PowerPoint
 
-Read [references/pptxgenjs-cheatsheet.md](references/pptxgenjs-cheatsheet.md) before writing code. It contains the default colour palette, font stack, and reusable helper functions — use them directly. Swap in your organization's brand colours by replacing the palette values at the top of the generation script.
+Render decks with the bundled template [assets/generate-deck.js](assets/generate-deck.js) instead of writing a new generation script. It implements the slide order and layout rules below and validates its input. Write the study content to `deck-content.json` in the study folder, modeled on [the fixture example](../tests/fixtures/mini-study/deck-content.json):
 
-Use `pptxgenjs` via Node.js. If uxr-ops passed an absolute save path, write there: the `.pptx`, the `generate.js`, and the `assets/` all land in that save folder. With no save path passed (standalone use), the default output path is `./output/research-report.pptx`.
+- `meta` (title, subtitle, author, date, optional footer and distribution label)
+- `objective` and `research_questions`
+- `methodology` rows
+- `participants` columns and rows
+- `executive_summary`
+- `themes`, each with an ID, headline, blocks, quotes and callout
+- optional `opportunities`, `recommendations` and `appendix`
+- `limitations`
 
-Before running, verify pptxgenjs is available. Use an existing approved runtime or ask how to proceed if the dependency is unavailable; do not silently modify the study folder's dependencies.
+Copy each quote's `text` from the ledger's `display_quote` or `quote`, without its own quotation marks, and give its `participant`, `source_id` and `locator`. The template adds the quotation marks and attribution that `check-report` traces.
 
-Save the generation script next to the deck using a non-conflicting name. Inspect the generated deck itself, including source fidelity, privacy, slide layout and accessibility; a script inspection does not verify rendered output.
+```bash
+node <path-to-harness>/uxr-research-presentation/assets/generate-deck.js <study-folder>/deck-content.json <study-folder>/research-report.pptx
+python <path-to-harness>/scripts/uxrops.py check-report --study <study-folder> <study-folder>/research-report.pptx
+```
+
+To brand the deck, change only the palette and `FONT` block at the top of a copy of the template, and keep that copy next to the deck. Read [references/pptxgenjs-cheatsheet.md](references/pptxgenjs-cheatsheet.md) only when a layout the template does not cover is genuinely needed.
+
+If uxr-ops passed an absolute save path, write `deck-content.json` and the `.pptx` there. With no save path passed (standalone use), the default output path is `./output/research-report.pptx`.
+
+Before running, verify pptxgenjs 4.0.1 is available, for example `npm install --prefix <approved-tools-folder> pptxgenjs@4.0.1` with `NODE_PATH` pointing at its `node_modules`. Use an existing approved runtime or ask how to proceed if the dependency is unavailable; do not silently modify the study folder's dependencies.
+
+Resolve every `check-report` failure before delivering. Then inspect the generated deck itself, including source fidelity, privacy, slide layout and accessibility; neither the script nor the check verifies rendered layout.
 
 ### Slide Order
 
@@ -137,5 +155,6 @@ State distinct participant count, method, relevant denominators, sampling limita
 ## Output
 
 - File: `research-report.pptx` saved to the agreed path (default `./output/`).
-- After generation, print the absolute path and suggest: `open <path>` on macOS.
+- After generation, print the absolute path and suggest opening it with the platform's default app: `start "" "<path>"` on Windows, `open "<path>"` on macOS, or `xdg-open "<path>"` on Linux.
+- Report the `check-report` result, including warnings reviewed.
 - Briefly summarize: slide count, themes included, participant count, and any slides where assets were missing or content was thin.

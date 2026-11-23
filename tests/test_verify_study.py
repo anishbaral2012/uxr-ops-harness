@@ -11,6 +11,8 @@ SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "verify_study.py"
 spec = importlib.util.spec_from_file_location("verify_study", SCRIPT)
 verifier = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(verifier)
+UXROPS = Path(__file__).resolve().parents[1] / "scripts" / "uxrops.py"
+from uxrops import verify as verify_module  # noqa: E402  (path set by the shim above)
 
 
 class StudyVerificationTests(unittest.TestCase):
@@ -110,6 +112,73 @@ class StudyVerificationTests(unittest.TestCase):
         self.manifest["sources"] = []
         self.ledger = {"source_snapshot": {}, "themes": []}
         self.assertIn("At least one research source", " ".join(self.check()))
+
+    def test_display_quote_with_marked_edits_passes(self):
+        item = self.ledger["themes"][0]["evidence"][0]
+        item["display_quote"] = "First session: … [a] real quote."
+        self.assertEqual(self.check(), [])
+
+    def test_display_quote_with_unmarked_trim_fails(self):
+        self.ledger["themes"][0]["evidence"][0]["display_quote"] = "First session real quote."
+        self.assertIn("display_quote not found in S1", " ".join(self.check()))
+
+    def test_locator_mismatch_fails(self):
+        self.ledger["themes"][0]["evidence"][0]["locator"] = "line 7"
+        self.assertIn("excerpt is at line 1", " ".join(self.check()))
+
+    def test_missing_quote_hint_suggests_normalize(self):
+        self.ledger["themes"][0]["evidence"][0]["quote"] = "a real  quote"
+        result = " ".join(self.check())
+        self.assertIn("rerun with --normalize", result)
+        self.manifest_path.write_text(json.dumps(self.manifest), encoding="utf-8")
+        self.assertEqual(verifier.verify(self.manifest_path, self.ledger_path, normalize=True), [])
+
+    def full(self, **kwargs):
+        self.check()
+        return verify_module.verify(self.manifest_path, self.ledger_path, **kwargs)
+
+    def test_warnings_do_not_fail(self):
+        findings = self.full()
+        self.assertEqual(findings.errors, [])
+        warnings = " ".join(findings.warnings)
+        self.assertIn("P2: listed without any source", warnings)
+        self.assertIn("T1: supported by one participant", warnings)
+
+    def test_research_questions_and_recommendations_are_linked(self):
+        self.ledger["research_questions"] = [{"id": "RQ1", "question": "Q?"}, {"id": "RQ2", "question": "Q2?"}]
+        self.ledger["themes"][0]["research_questions"] = ["RQ1", "RQ9"]
+        self.ledger["recommendations"] = [{"id": "R1", "theme_ids": ["T7"], "proposal": "Do it."},
+                                          {"id": "R2", "theme_ids": [], "proposal": "Do more."}]
+        findings = self.full()
+        errors = " ".join(findings.errors)
+        self.assertIn("unknown research question RQ9", errors)
+        self.assertIn("R1: references unknown theme T7", errors)
+        self.assertIn("R2: a recommendation must name the theme IDs", errors)
+        self.assertIn("RQ2: no theme addresses", " ".join(findings.warnings))
+
+    def test_cli_json_and_strict(self):
+        self.check()
+        base = [sys.executable, str(UXROPS), "verify", str(self.manifest_path), str(self.ledger_path)]
+        result = subprocess.run(base + ["--format", "json"], capture_output=True, text=True, check=False)
+        self.assertEqual(result.returncode, 0)
+        data = json.loads(result.stdout)
+        self.assertTrue(data["ok"])
+        self.assertTrue(data["warnings"])
+        strict = subprocess.run(base + ["--strict"], capture_output=True, text=True, check=False)
+        self.assertEqual(strict.returncode, 1)
+
+    def test_cli_accepts_study_folder(self):
+        self.manifest_path = self.root / "study-manifest.json"
+        self.ledger_path = self.root / "evidence-ledger.json"
+        self.check()
+        result = subprocess.run([sys.executable, str(UXROPS), "verify", str(self.root)],
+                                capture_output=True, text=True, check=False)
+        self.assertEqual(result.returncode, 0, result.stdout)
+
+    def test_json_saved_with_windows_bom_is_read(self):
+        self.check()
+        self.manifest_path.write_text("﻿" + json.dumps(self.manifest), encoding="utf-8")
+        self.assertEqual(verifier.verify(self.manifest_path, self.ledger_path), [])
 
     def test_bad_json_and_cli_exit_status(self):
         self.check()

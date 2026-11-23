@@ -1,0 +1,5 @@
+SYNTHETIC INTERVIEW EXCERPT, P1, session 01
+Context: renewing a parking permit online.
+Q1 P1: I renewed the permit on my phone during lunch. The form remembered my plate number.
+Q2 P1: I wasn't sure the payment went through, so I checked my bank app twice.
+Q3 P1: The receipt email came an hour later, which is when I finally relaxed.

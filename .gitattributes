@@ -1,1 +1,13 @@
+# Harness code and docs use LF line endings.
 * text=auto eol=lf
+
+# Study files are hashed byte for byte. Converting their line endings on checkout
+# would change every hash and make the verifier report drift on another machine.
+# `uxrops init` also writes a `* -text` .gitattributes inside each new study folder,
+# which protects study folders kept anywhere in a repository.
+/studies/** -text
+tests/fixtures/** -text
+**/transcripts/** -text
+study-manifest.json -text
+evidence-ledger.json -text
+uxr-project.json -text

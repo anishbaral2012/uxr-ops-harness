@@ -160,7 +160,7 @@ Review this before drafting the plan. These are the most common ways a plan fail
 
 ## Output Format
 
-Deliver the research plan as a **Microsoft Word document (.docx)**. Do not output it as inline markdown in the chat. Use the template below to structure the document, preserving all headings, tables, and formatting. Save the file as `Research Plan - [Project Name].docx` and share it with the user.
+Deliver the research plan as a **Microsoft Word document (.docx)**. Do not output it as inline markdown in the chat. Write the plan as Markdown (`plan.md` in the study folder) using the template below, preserving all headings and tables, then convert it with `python <path-to-harness>/scripts/uxrops.py docx plan.md "Research Plan - [Project Name].docx"` (needs python-docx; see the root README). Open the Word file to check it, and share its absolute path with the user. Give each primary and secondary research question an ID (RQ1, RQ2…) so the guide, ledger and report can refer to it.
 
 ---
 
@@ -361,6 +361,6 @@ Before delivering the research plan, verify:
 - Method matches the primary unknown
 - Participants match the target audience from the documents
 - Risks are realistic and specific (not generic placeholders)
-- No mid-sentence hyphen or dash in the authored prose (user writing rule). Rephrase with a comma, colon, parentheses, or two sentences.
+- Authored prose follows the study's `style` settings in `uxr-project.json` (for example `avoid_mid_sentence_dashes`).
 
 If any check fails, revise before finalizing.

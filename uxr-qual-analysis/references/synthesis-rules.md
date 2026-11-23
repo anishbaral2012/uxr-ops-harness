@@ -1,6 +1,6 @@
 # Synthesis Rules
 
-Detailed rules for Step 1 of the uxr-report-building skill.
+Detailed rules for Step 1 of the uxr-qual-analysis skill.
 
 ---
 
@@ -22,8 +22,9 @@ A good quote:
 - **Is specific and attributable** — clearly tied to one participant, contains enough context to be interpretable without paraphrasing.
 - **Is representative, not the most dramatic** — vivid quotes create an availability heuristic risk. The best quote for a finding is the most representative one, not the most quotable.
 - **Is 1–3 sentences** — trim filler ("um", "you know", "like") but never alter meaning.
-- Use **ellipses (…)** for cuts within a quote.
+- Use **ellipses (…)** for every cut within a quote, including trimmed filler.
 - Use **[brackets]** for clarifying inserts (e.g., "[the approval screen]").
+- In the evidence ledger, keep the unedited excerpt in `quote` and put the trimmed version in `display_quote`. The verifier checks that each fragment between cuts and inserts appears in the source in order; an unmarked trim fails. See [study schema](../../references/study-schema.md).
 
 Attribute as: `— P3, Procurement Manager` (participant code + role only).
 

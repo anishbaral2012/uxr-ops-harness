@@ -1,0 +1,29 @@
+{
+  "participants": [
+    "P1",
+    "P2"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "participant_id": "P1",
+      "session_id": "session-01",
+      "path": "transcripts/S1-P1.txt",
+      "sha256": "b6c3e19bb332742e07cb451ab567a6e28f61879f7e23e1d61ffdb2b47e4038f5"
+    },
+    {
+      "id": "S2",
+      "participant_id": "P1",
+      "session_id": "session-02",
+      "path": "transcripts/S2-P1-followup.txt",
+      "sha256": "90803994db19dee6f7151a3ad2e6acfe8afa1821062b30879394dde7c2770a11"
+    },
+    {
+      "id": "S3",
+      "participant_id": "P2",
+      "session_id": "session-03",
+      "path": "transcripts/S3-P2.txt",
+      "sha256": "77a5f6b0010d1ce1c352cdc71798f82cd6885a00b4c99d2fa21d96bf3b0fa0bd"
+    }
+  ]
+}

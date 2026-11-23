@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uxrops"
+version = "2.0.0"
+description = "Mechanical checks and tools for traceable UX research studies"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+docx = ["python-docx==1.2.0"]
+
+[project.scripts]
+uxrops = "uxrops.cli:main"
+
+[tool.setuptools]
+packages = ["uxrops"]

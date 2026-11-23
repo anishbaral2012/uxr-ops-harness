@@ -1,0 +1,92 @@
+{
+  "source_snapshot": {
+    "S1": "b6c3e19bb332742e07cb451ab567a6e28f61879f7e23e1d61ffdb2b47e4038f5",
+    "S2": "90803994db19dee6f7151a3ad2e6acfe8afa1821062b30879394dde7c2770a11",
+    "S3": "77a5f6b0010d1ce1c352cdc71798f82cd6885a00b4c99d2fa21d96bf3b0fa0bd"
+  },
+  "research_questions": [
+    {
+      "id": "RQ1",
+      "question": "How do residents confirm that a renewal succeeded?"
+    },
+    {
+      "id": "RQ2",
+      "question": "What keeps residents from renewing online?"
+    }
+  ],
+  "themes": [
+    {
+      "id": "T1",
+      "claim": "Residents looked for proof of payment before they considered the renewal done",
+      "research_questions": [
+        "RQ1"
+      ],
+      "supporting_participants": [
+        "P1",
+        "P2"
+      ],
+      "counter_evidence": "Both participants discussed confirmation. Neither described a renewal they trusted without a receipt or bank record.",
+      "evidence": [
+        {
+          "source_id": "S1",
+          "source_sha256": "b6c3e19bb332742e07cb451ab567a6e28f61879f7e23e1d61ffdb2b47e4038f5",
+          "locator": "line 4",
+          "polarity": "support",
+          "quote": "I wasn't sure the payment went through, so I checked my bank app twice."
+        },
+        {
+          "source_id": "S1",
+          "source_sha256": "b6c3e19bb332742e07cb451ab567a6e28f61879f7e23e1d61ffdb2b47e4038f5",
+          "locator": "line 5",
+          "polarity": "support",
+          "quote": "The receipt email came an hour later, which is when I finally relaxed.",
+          "display_quote": "The receipt email came an hour later … when I finally relaxed."
+        },
+        {
+          "source_id": "S3",
+          "source_sha256": "77a5f6b0010d1ce1c352cdc71798f82cd6885a00b4c99d2fa21d96bf3b0fa0bd",
+          "locator": "00:02:45",
+          "polarity": "support",
+          "quote": "The clerk printed a receipt right away, so I knew it was done."
+        }
+      ]
+    },
+    {
+      "id": "T2",
+      "claim": "Distrust of the website kept one resident at the counter",
+      "research_questions": [
+        "RQ2"
+      ],
+      "supporting_participants": [
+        "P2"
+      ],
+      "counter_evidence": "P1 renewed online without hesitation. P2 was the only participant who chose the counter.",
+      "evidence": [
+        {
+          "source_id": "S3",
+          "source_sha256": "77a5f6b0010d1ce1c352cdc71798f82cd6885a00b4c99d2fa21d96bf3b0fa0bd",
+          "locator": "00:01:10",
+          "polarity": "support",
+          "quote": "I went to the counter because I didn't trust the website with my card.",
+          "display_quote": "I went to the counter because I didn't trust [the city] website with my card."
+        },
+        {
+          "source_id": "S1",
+          "source_sha256": "b6c3e19bb332742e07cb451ab567a6e28f61879f7e23e1d61ffdb2b47e4038f5",
+          "locator": "line 3",
+          "polarity": "contradict",
+          "quote": "I renewed the permit on my phone during lunch."
+        }
+      ]
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "R1",
+      "theme_ids": [
+        "T1"
+      ],
+      "proposal": "Show an immediate on-screen receipt and send the email at once."
+    }
+  ]
+}

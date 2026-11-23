@@ -1,0 +1,59 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    name: Python ${{ matrix.python }} (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.10', '3.13']
+        include:
+          - os: ubuntu-latest
+            python: '3.11'
+          - os: ubuntu-latest
+            python: '3.12'
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Word converter dependency
+        run: python -m pip install python-docx==1.2.0
+      - name: Run bundled tests
+        run: python -m unittest discover -s tests -v
+      - name: Verify the fixture study after checkout (catches line-ending hash drift)
+        run: python scripts/uxrops.py verify tests/fixtures/mini-study
+
+  deck:
+    name: Deck template renders and traces to the ledger
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+      - name: Install pptxgenjs outside the repository
+        run: npm install --prefix "$RUNNER_TEMP/deck-tools" --no-audit --no-fund pptxgenjs@4.0.1
+      - name: Render the fixture deck
+        run: NODE_PATH="$RUNNER_TEMP/deck-tools/node_modules" node uxr-research-presentation/assets/generate-deck.js tests/fixtures/mini-study/deck-content.json "$RUNNER_TEMP/fixture-deck.pptx"
+      - name: Check the analysis and rendered deck against the ledger
+        run: python scripts/uxrops.py check-report --study tests/fixtures/mini-study tests/fixtures/mini-study/analysis.md "$RUNNER_TEMP/fixture-deck.pptx"

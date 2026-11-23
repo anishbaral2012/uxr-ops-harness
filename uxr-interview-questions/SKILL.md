@@ -13,7 +13,7 @@ Generates research-grade interview guides — or critiques a user's existing dra
 
 The bulky pieces live in `references/`:
 - `references/worked-example-pm-tools.md` — full reference example to model your output on.
-- `references/md-to-docx.py` — the `.docx` converter you'll invoke.
+- The `.docx` converter is shared: `../scripts/uxrops.py docx` (relative to this file).
 
 ---
 
@@ -63,14 +63,15 @@ The bulky pieces live in `references/`:
 2. Write the markdown to a temp file, then convert with the bundled script:
 
    ```bash
-   python3 <path-to-this-skill>/references/md-to-docx.py \
-       <input.md> <output.docx>
+   python <path-to-harness>/scripts/uxrops.py docx <input.md> <output.docx>
    ```
+
+   Use `python`, or `py -3` on Windows and `python3` on macOS or Linux where `python` is unavailable. The converter needs python-docx; `uv run --with python-docx==1.2.0 python ...` supplies it without changing the environment.
 
 3. **Save location:** if uxr-ops passed an absolute save path, it overrides the current working directory and you write the `.docx` there. With no save path passed (standalone use), save to the user's current working directory (the directory shown in the Claude Code session). After writing, surface the **absolute path** so the user can find the file. If no path was passed and the CWD is the user's home (`~`) or otherwise unclear, ask where they'd like it saved before writing.
 4. **Filename pattern:** `interview-guide-<short-topic>-<YYYYMMDD>.docx`
    (e.g., `interview-guide-pm-tools-20260604.docx`).
-5. **Fallback:** if `python-docx` isn't available (`python3 -c "import docx"` fails), try `pandoc -f markdown -t docx -o <out>.docx <in>.md`. If neither works, surface the error and ask the user how to deliver.
+5. **Fallback:** if `python-docx` isn't available (the command reports it), try `pandoc -f markdown -t docx -o <out>.docx <in>.md`. If neither works, surface the error and ask the user how to deliver.
 6. **Skip `.docx`** only when the user explicitly says "markdown only," "paste inline," or similar.
 
 The bundled script handles: headings, blockquotes, bullets (with one level of indent), numbered lists, pipe tables, `[ ]`/`[x]` checkboxes (rendered as ☐/☑), inline `**bold**` / `*italic*` / `` `code` `` / `[text](url)`, and `---` horizontal rules.
@@ -292,7 +293,7 @@ End with a structural summary: *"Missing warm-up section. 2 of 3 hypotheses unte
 - [ ] Time estimates sum to the requested session length (incl. intro + transitions).
 - [ ] `.docx` file produced (or user explicitly opted out) and absolute path surfaced to the user.
 - [ ] Moderator notes included for sensitive or tricky topics.
-- [ ] No mid-sentence hyphen or dash in the authored prose (user writing rule). Rephrase with a comma, colon, parentheses, or two sentences. Em-dash attributions inside verbatim quotes are fine.
+- [ ] Authored prose follows the study's `style` settings in `uxr-project.json` (for example `avoid_mid_sentence_dashes`). Verbatim quotes are never restyled.
 
 ---
 

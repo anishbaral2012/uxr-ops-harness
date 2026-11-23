@@ -1,5 +1,7 @@
 # pptxgenjs Cheatsheet — Default Professional Design System
 
+> The bundled [deck template](../assets/generate-deck.js) already implements these helpers and the slide specs. Use this cheatsheet only to extend the template for a layout it does not cover.
+
 Syntax reference and reusable helpers for generating professional UX research reports. For full pptxgenjs docs see https://gitbrent.github.io/PptxGenJS/. Swap the `C` palette values for your organization's brand colours.
 
 ---

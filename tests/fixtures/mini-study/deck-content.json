@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "title": "Parking permit renewal",
+    "subtitle": "City services: discovery interviews (synthetic fixture)",
+    "author": "Demo research team",
+    "date": "23 November 2026",
+    "footer": "Synthetic study",
+    "distribution": "Synthetic participants and evidence"
+  },
+  "objective": "Decide what the online renewal flow must show so residents know a renewal succeeded.",
+  "research_questions": [
+    {"id": "RQ1", "question": "How do residents confirm that a renewal succeeded?"},
+    {"id": "RQ2", "question": "What keeps residents from renewing online?"}
+  ],
+  "methodology": [
+    ["Research type", "Discovery interviews"],
+    ["Format", "Remote and in person, moderated"],
+    ["Sessions", "3 sources across 2 residents"],
+    ["Dates", "November 2026"]
+  ],
+  "methodology_note": "Two fictional accounts. Counts describe the fixture, not a population.",
+  "participants": {
+    "columns": ["Participant", "Channel", "Sources"],
+    "rows": [["P1", "Online", "S1, S2"], ["P2", "Counter", "S3"]],
+    "note": "Two fictional residents. The P1 follow up adds a source, not a participant."
+  },
+  "executive_summary": [
+    {"lead": "Proof of payment ended the task.", "detail": "Two of two residents looked for a receipt or bank record before they relaxed."},
+    {"lead": "Distrust kept one resident offline.", "detail": "One of two chose the counter because of the website."}
+  ],
+  "summary_note": "Counts describe two synthetic accounts.",
+  "themes": [
+    {
+      "id": "T1",
+      "headline": "Residents looked for proof of payment before they considered the renewal done",
+      "blocks": [
+        {"label": "Pattern", "text": "P1 checked a bank app; P2 waited for a printed receipt."},
+        {"label": "Implication", "text": "Confirmation needs to be immediate and unambiguous."}
+      ],
+      "quotes": [
+        {"text": "I wasn't sure the payment went through, so I checked my bank app twice.", "participant": "P1", "role": "resident", "source_id": "S1", "locator": "line 4"},
+        {"text": "The clerk printed a receipt right away, so I knew it was done.", "participant": "P2", "role": "resident", "source_id": "S3", "locator": "00:02:45"}
+      ],
+      "callout": "T1   2 of 2 residents fit the pattern."
+    },
+    {
+      "id": "T2",
+      "headline": "Distrust of the website kept one resident at the counter",
+      "blocks": [
+        {"label": "Pattern", "text": "P2 did not trust the website with a card."},
+        {"label": "Other cases", "text": "P1 renewed online without hesitation."}
+      ],
+      "quotes": [
+        {"text": "I went to the counter because I didn't trust [the city] website with my card.", "participant": "P2", "role": "resident", "source_id": "S3", "locator": "00:01:10"}
+      ],
+      "callout": "T2   1 of 2 residents. A weak signal."
+    }
+  ],
+  "opportunities": [
+    {"title": "Immediate confirmation", "detail": "Residents relaxed only once they held proof.", "evidence": "Evidence from T1", "directions": ["Show an on-screen receipt at once."]}
+  ],
+  "recommendations": [
+    {"priority": "HIGH", "action": "Show an immediate on-screen receipt", "rationale": "Both residents waited for proof.", "theme_ids": ["T1"]}
+  ],
+  "appendix": [],
+  "limitations": "Two invented accounts. Retrospective interviews do not establish task success or prevalence."
+}

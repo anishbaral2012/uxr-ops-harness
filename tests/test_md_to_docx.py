@@ -1,4 +1,4 @@
-import importlib.util
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -8,16 +8,15 @@ try:
 except ImportError:
     Document = None
 
-SCRIPT = Path(__file__).resolve().parents[1] / "uxr-interview-questions" / "references" / "md-to-docx.py"
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from uxrops import markdown_docx  # noqa: E402
 
 
 @unittest.skipIf(Document is None, "python-docx is not installed")
 class MarkdownConversionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        spec = importlib.util.spec_from_file_location("md_to_docx", SCRIPT)
-        cls.converter = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(cls.converter)
+        cls.converter = markdown_docx
 
     def test_escaped_pipe_survives_in_a_table_cell(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -37,6 +36,16 @@ class MarkdownConversionTests(unittest.TestCase):
             source.write_text("| A | B |\n| --- | --- |\n| 1 | 2 | 3 |\n", encoding="utf-8")
             with self.assertRaisesRegex(ValueError, "header has 2"):
                 self.converter.convert(source, Path(tmp) / "guide.docx")
+
+    def test_heading_inline_formatting_is_rendered(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            source = Path(tmp) / "guide.md"
+            out = Path(tmp) / "guide.docx"
+            source.write_text("## Warm-up `[~5 min]` and **core**\n", encoding="utf-8")
+            self.converter.convert(source, out)
+            heading = Document(out).paragraphs[0]
+            self.assertEqual(heading.text, "Warm-up [~5 min] and core")
+            self.assertTrue(any(run.bold for run in heading.runs))
 
     def test_empty_row_is_not_a_separator(self):
         self.assertFalse(self.converter.is_table_separator("| | |"))
